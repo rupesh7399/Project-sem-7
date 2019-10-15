@@ -1,0 +1,77 @@
+{% extends 'analysis.html' %}
+
+{% block css %}
+
+{% endblock  %}
+{% comment %} ------------------------------------header Part------------------------------------------------------- {% endcomment %}
+{% block header %}
+<i class="fa fa-line-chart" aria-hidden="true"> &nbsp; </i>Descriptive Analysis
+{% endblock  %}
+
+{% comment %} -------------------------------------main content------------------------------------------------------ {% endcomment %}
+
+{% block content %}
+
+<div>
+</br>
+<table class = "table" style="width:100px;" border='1'>
+<tr>
+<th colspan='2'> Descriptive Analysis of  Rainfall Data of {% for data in date_min %}{{data}}{% endfor %} To {% for data in date_max  %}{{data}}{% endfor %}   </th>
+</tr>
+<tr>
+
+<th>Mean</th>
+<td>{% for data in m  %}
+{{data}}
+{% endfor %}</td>
+</tr>
+<tr>
+<th>Median</th>
+<td>{% for data in mi  %}
+{{data}}
+{% endfor %}</td>
+</tr>
+<tr>
+<th>Mode</th>
+<td>{% for data in mo  %}
+{{data}}
+{% endfor %}</td>
+</tr>
+<tr>
+<th>Range</th>
+<td>Min = {% for data in min  %}
+{{data}}
+{% endfor %},Max={% for data in max  %}
+{{data}}
+{% endfor %}</td>
+</tr>
+<tr>
+<th>Perctntiles/Quartiles</th>
+<td>{% for data in a  %}
+{{data}}
+{% endfor %}</td>
+</tr>
+<tr>
+<th>IQR</th>
+<td>{% for data in b  %}
+{{data}}
+{% endfor %}</td>
+</tr>
+
+</tr>
+<tr>
+<th>Variance</th>
+<td>{% for data in var  %}{{data}}{% endfor %}</td>
+</tr>
+ <th>StandardDeviation</th>
+<td>{% for data in std  %}{{data}}{% endfor %}</td>
+</tr>
+<th>Skewness</th>
+<td>{% for data in skew  %}{{data}}{% endfor %}</td>
+</tr>
+<th>Kurtosis</th>
+<td>{% for data in ku  %}{{data}}{% endfor %}</td>
+</tr>
+</table>
+</div>
+{% endblock %}

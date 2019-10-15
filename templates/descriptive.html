@@ -1,0 +1,43 @@
+{% extends 'analysis.html' %}
+
+{% block css %}
+
+{% endblock  %}
+{% comment %} ------------------------------------header Part------------------------------------------------------- {% endcomment %}
+{% block header %}
+<i class="fa fa-line-chart" aria-hidden="true"> &nbsp; </i>Descriptive Analysis
+{% endblock  %}
+
+{% comment %} -------------------------------------main content------------------------------------------------------ {% endcomment %}
+
+{% block content %}
+<div>
+<form method="POST" action="desAnalysis">
+        {% csrf_token %}
+        <h4 class="text-danger">Select Time Duration of Data(Rain Fall):</h4>
+        <div class="form-row">
+          
+          <div class="form-group col-md-2 col-lg-2">
+            <label for="publishDateMin"><b>Starting Date:</b></label>
+            <input type="date" class="form-control"  name="date_min" min = "1989-01-01" value="1989-01-01" required>
+          </div>
+          <div class="form-group col-md-2 col-lg-2">
+            <label for="publishDateMax"><b>Ending date:</b> </label>
+            <input type="date" class="form-control"  name="date_max" required>
+          </div>
+          
+        </div>
+        
+        {% comment %} <table><tr><td><input type="radio" name="data" value="Month"> 
+        Monthly<br>
+  <input type="radio" name="data" value="weekly"> Weekly<br>
+  </td></tr>
+        </table></br> {% endcomment %}
+       <button type="submit" class="btn btn-primary" formtarget="_blank">Analysis</button>
+      </form>
+</div>
+<div>
+</br>
+
+</div>
+{% endblock %}

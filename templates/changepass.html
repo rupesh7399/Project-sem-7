@@ -1,0 +1,59 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div style="margin-top:100px;">
+{% for message in messages %}
+
+                    <div class="alert alert-success">
+                        <a class="close" href="#" data-dismiss="alert">×</a>
+
+                        {{ message }}
+
+                    </div>
+            {% endfor %}
+{% comment %} <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> {% endcomment %}
+  <div class="col-sm-4 " style="margin-left : 33%;margin-bottom:100px;"  role="document" >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Change Password</h5>
+        
+        
+          
+      
+      </div>
+      <div class="modal-body">
+        <form action="chake" method="post">
+        {% csrf_token %}
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Old Password:</label>
+            <input type="password" required class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" placeholder="Old Password" >
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">New Password:</label>
+           <input type="password" class="form-control" id="exampleInputPassword1" name='password' placeholder="New Password" required>
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Conform Password:</label>
+           <input type="password" class="form-control" id="exampleInputPassword2" name='p1' placeholder="Conform Password" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Change Password</button>
+           <div>
+              {% for message in massages %}
+              <h3> {{message1}} </h3>
+              {% endfor %}
+        </div>
+        </form>
+       
+
+      </div>
+      <div class="modal-footer" style="">
+        
+      
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock  %}
+

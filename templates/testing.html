@@ -1,0 +1,36 @@
+{% extends 'deshborad.html' %}
+
+{% block css %}
+
+{% endblock  %}
+{% comment %} ------------------------------------header Part------------------------------------------------------- {% endcomment %}
+{% block header %}
+Reports
+{% endblock  %}
+
+{% comment %} -------------------------------------main content------------------------------------------------------ {% endcomment %}
+
+{% block content %}
+<div style="margin-top:100px;">
+ 
+          
+   
+         
+
+      
+
+     
+
+    
+    {% for data in df2 %}
+        <p>
+            {{date.Year}}
+            {{date.Week_Number}}
+        </p>
+ 
+
+            {% endfor %}
+         
+ 
+</div>
+{% endblock  %}

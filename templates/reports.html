@@ -1,0 +1,196 @@
+{% extends 'deshborad.html' %}
+
+{% block css %}
+
+{% endblock  %}
+{% comment %} ------------------------------------header Part------------------------------------------------------- {% endcomment %}
+{% block header %}
+Reports
+{% endblock  %}
+
+{% comment %} -------------------------------------main content------------------------------------------------------ {% endcomment %}
+
+{% block content %}
+<div>
+ <form method="POST" action="filter">
+        {% csrf_token %}
+        <div class="form-row">
+          
+          <div class="form-group col-md-2 col-lg-2">
+            <label for="publishDateMin">Starting Date</label>
+            <input type="date" class="form-control" id="publishDateMin" name="date_min" required>
+          </div>
+          <div class="form-group col-md-2 col-lg-2">
+            <label for="publishDateMax">Ending date </label>
+            <input type="date" class="form-control" id="publishDateMax" name="date_max" required>
+          </div>
+          
+        </div>
+        {% comment %} <div class="form-group">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="reviewed" name="reviewed">
+            <label class="form-check-label" for="reviewed">
+              Reviewed
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="notReviewed" name="notReviewed">
+            <label class="form-check-label" for="notReviewed">
+              Not reviewed
+            </label>
+          </div>
+        </div> {% endcomment %}
+        <table><tr><td><input type="radio" name="data" value="Month"> 
+        Monthly<br>
+  <input type="radio" name="data" value="weekly"> Weekly<br>
+  </td></tr>
+        </table>
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+`        <hr />
+
+      <div class="scrollingTable" >
+
+     
+<table id="myTable" class="table table-striped table-bordered table-sm" style="width:100%;">
+<thead>
+            <tr>
+               {% comment %} <td>Year</td> {% endcomment %}
+               {% comment %} <td>Month Number </td> {% endcomment %}
+               <th>DATE</th> 
+               <th>ET</th>
+               <th>EP</th>
+               <th>BSS</th>
+               <th>RF</th>
+               {% comment %} <th>WD</th> {% endcomment %}
+               {% comment %} <th>WD1</th> {% endcomment %}
+               <th>WS</th>
+               <th>DT1</th>
+               <th>WT1</th>
+               <th>DT2</th>
+               <th>WT2</th>
+               <th>MAXT</th>
+               <th>MINT</th>
+               <th>RH11</th>
+               <th>RH22</th>
+               <th>VP11</th>
+               <th>VP11</th>
+               <th>CLOUDM</th>
+               <th>CLOUDE</th>
+               <th>SOIL1</th>
+               <th>SOIL2</th>
+               <th>SOIL3</th>
+               <th>SOIL4</th>
+               <th>SOIL5/th>
+               <th>SOIL6</th>
+               <th>MinTtest</th>
+               <th>MaxTtest1</th>
+               <th>MaxTtest2</th> 
+              
+               {% comment %} {% if user.is_superuser %} {% endcomment %}
+          
+               
+                {% comment %} {% endif %} {% endcomment %}
+            </tr>
+    </thead>
+    <tbody>
+    
+    {% for data in qs %}
+
+            <tr>
+               {% comment %} <td>{{data.year}}</td> {% endcomment %}
+               {% comment %} <td>{{data.Month_Number }}</td> {% endcomment %}
+                <td>{{data.DATE |date:" d-m-Y"}}</td>  
+               {% comment %} <td>{{data.}}</td> {% endcomment %}
+               <td>{{data.ET}}</td>
+               <td>{{data.EP}}</td>
+               <td>{{data.BSS}}</td>
+               <td>{{data.RF}}</td>
+               {% comment %} <td>{{data.WD}}</td> {% endcomment %}
+               {% comment %} <td>{{data.WD1}}</td> {% endcomment %}
+               <td>{{data.WS}}</td>
+               <td>{{data.DT1}}</td>
+               <td>{{data.WT1}}</td>
+               <td>{{data.DT2}}</td>
+               <td>{{data.WT2}}</td>
+               <td>{{data.MAXT}}</td>
+               <td>{{data.MINT}}</td>
+               <td>{{data.RH11}}</td>
+               <td>{{data.RH22}}</td>
+               <td>{{data.VP11}}</td>
+               <td>{{data.VP11}}</td>
+               <td>{{data.CLOUDM}}</td>
+               <td>{{data.CLOUDE}}</td>
+               <td>{{data.SOIL1}}</td>
+               <td>{{data.SOIL2}}</td>
+               <td>{{data.SOIL3}}</td>
+               <td>{{data.SOIL4}}</td>
+               <td>{{data.SOIL5}}</td>
+               <td>{{data.SOIL6}}</td>
+               <td>{{data.MinTtest}}</td>
+               <td>{{data.MaxTtest1}}</td>
+               <td>{{data.MaxTtest2}}</td> 
+               {% comment %} <td>{{data.}}</td> {% endcomment %}
+
+               {% comment %} {% if user.is_superuser %}
+               <td><a href = "admin/test1/weather_data/{{data.id}}/change/" class="btn-info btn">Edit</a>  </td>
+             
+               <td><a href = "W_delete{{data.id}}"class="btn-danger btn" >Delete</a></td>
+               
+               {% endif %} {% endcomment %}
+            </tr>
+
+            {% endfor %}
+            </tbody>
+        
+        <tfoot>
+            <tr>
+               {% comment %} <td>Year</td> {% endcomment %}
+               {% comment %} <td>Month Number </td> {% endcomment %}
+               <th>DATE</th> 
+               <th>ET</th>
+               <th>EP</th>
+               <th>BSS</th>
+               <th>RF</th>
+               {% comment %} <th>WD</th> {% endcomment %}
+               {% comment %} <th>WD1</th> {% endcomment %}
+               <th>WS</th>
+               <th>DT1</th>
+               <th>WT1</th>
+               <th>DT2</th>
+               <th>WT2</th>
+               <th>MAXT</th>
+               <th>MINT</th>
+               <th>RH11</th>
+               <th>RH22</th>
+               <th>VP11</th>
+               <th>VP11</th>
+               <th>CLOUDM</th>
+               <th>CLOUDE</th>
+               <th>SOIL1</th>
+               <th>SOIL2</th>
+               <th>SOIL3</th>
+               <th>SOIL4</th>
+               <th>SOIL5/th>
+               <th>SOIL6</th>
+               <th>MinTtest</th>
+               <th>MaxTtest1</th>
+               <th>MaxTtest2</th> 
+              
+               {% comment %} {% if user.is_superuser %} {% endcomment %}
+              
+               
+                {% comment %} {% endif %} {% endcomment %}
+            </tr>
+        </tfoot>
+</table>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+</div>
+{% endblock  %}
