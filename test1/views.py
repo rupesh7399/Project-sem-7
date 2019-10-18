@@ -32,6 +32,8 @@ from pylab import *
 from chartit import DataPool, Chart
 import json
 #import win32api
+from jinja2 import Environment, FileSystemLoader
+#from weasyprint import HTML
 
 #############################################
 #----------ABOUT----------------------------#
@@ -191,7 +193,7 @@ def W_delete(request,id):
 ##################################
 #----------report search---------#
 ##################################
-
+import pdfkit
 
 def filter(request):
     date_min = request.POST.get('date_min')
@@ -298,9 +300,11 @@ def desAnalysis(request):
     
     return render(request,"descriptiveanswer.html",locals())
 
+
 ############################################################
 ###########--Start Markov Chain process--###################
 ############################################################
+from django.template.loader import render_to_string
 def MarkovProcess(request):
     date_min = request.POST.get('date_min')
     date_max = request.POST.get('date_max')
@@ -324,45 +328,53 @@ def MarkovProcess(request):
     df['sec'] = df.P.shift(1)
     def analysis(df):
         if (df['P'] == 0 and df['sec']==0):
-            return 'D/D'
+            return 'DD'
         elif (df['P'] == 0 and df['sec']==1):
-            return 'D/W'
+            return 'DW'
         elif (df['P'] == 1 and df['sec']==0):
-            return 'W/D'
+            return 'WD'
         elif (df['P'] == 1 and df['sec']==1):
-            return 'W/W'
+            return 'WW'
     df['N'] = df.apply(analysis,axis = 1)
     #df = pd.get_dummies(df.set_index('NO')['P']).max(level=0).reset_index()
     df = df.groupby('weekofyear').N.value_counts().unstack().fillna(0)
-    df['N0'] = df['D/D'] + df['W/D']
-    df['N1'] = df['D/W'] + df['W/W']
-    df['P(D/D)'] = df['D/D'] / df['N0']
-    df['P(D/W)'] = df['W/D'] / df['N0']
-    df['P(W/D)'] = df['D/W'] / df['N1']
-    df['P(W/W)'] = df['W/W'] / df['N1']
-    df['P(D)'] = df['D/D'] + df['W/D'] / df['N0'] + df['N1']
-    df['P(W)'] = df['D/W'] + df['W/W'] / df['N0'] + df['N1']
+    df['N0'] = df['DD'] + df['WD']
+    df['N1'] = df['DW'] + df['WW']
+    df['PDD'] = df['DD'] / df['N0']
+    df['PDW'] = df['WD'] / df['N0']
+    df['PWD'] = df['DW'] / df['N1']
+    df['PWW'] = df['WW'] / df['N1']
+    df['PD'] = df['DD'] + df['WD'] / df['N0'] + df['N1']
+    df['PW'] = df['DW'] + df['WW'] / df['N0'] + df['N1']
     #df = df.loc[:,['P(W)','P(W/W)','W/D']]
+    df = df.fillna(0)
     df = df.round(2)
-    #df = df.to_json(orient='records')
     N0 = df.loc[:,['N0']].values.tolist()
     N1 = df.loc[:,['N1']].values.tolist()
-    DD = df.loc[:,['P(D/D)']].values.tolist()
-    DW = df.loc[:,['P(D/W)']].values.tolist()
-    W = df.loc[:,['P(W)']].values.tolist()
-    WW = df.loc[:,['P(W/W)']].values.tolist()
-    WD = df.loc[:,['W/D']].values.tolist()
+    DD = df.loc[:,['PDD']].values.tolist()
+    DW = df.loc[:,['PDW']].values.tolist()
+    W = df.loc[:,['PW']].values.tolist()
+    WW = df.loc[:,['PWW']].values.tolist()
+    WD = df.loc[:,['WD']].values.tolist()
+    PD = df.loc[:,['PD']].values.tolist()
+    
     week = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31','32','33','34','35','36','37','38','39','40','41','42','43','44','45','46','47','48','49','50','51','52']
     week = pd.DataFrame(week).values.tolist()
     
-
+    
+   
     return render(request,"markovreport.html",{
-        'w' : json.dumps(W),
-        'categories': json.dumps(week),
-        'survived_series': json.dumps(WW),
-        'not_survived_series': json.dumps(WD),
+        'PW' : json.dumps(W),
+        'week': json.dumps(week),
+        'PWW': json.dumps(WW),
+        'PWD': json.dumps(WD),
         'N0' : json.dumps(N0),
         'N1' : json.dumps(N1),
         'DD' : json.dumps(DD),
-        'DW' : json.dumps(DW)
+        'DW' : json.dumps(DW),
+        
+        
     })
+###########################################################
+#-----------dataTable-------------------------------------#
+###########################################################

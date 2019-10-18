@@ -27,6 +27,7 @@ urlpatterns = [
     path('changepass',views.changepass,name="changepass"),
     path('chake',views.chake,name="chake"),
     path('MarkovProcess',views.MarkovProcess,name="MarkovProcess"),
+    
         
     
     

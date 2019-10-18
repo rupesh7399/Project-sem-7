@@ -19,6 +19,19 @@
 .highcharts-axis-line {
   stroke-width: 0;
 }
+th, td, p, input {
+            font:14px Verdana;
+        }
+        table, th, td 
+        {
+            border: solid 1px #DDD;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            text-align: center;
+        }
+        th {
+            font-weight:bold;
+        }
 
   </style>
   
@@ -26,6 +39,7 @@
 {% endblock  %}
 {% comment %} ------------------------------------header Part------------------------------------------------------- {% endcomment %}
 {% block header %}
+
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -33,6 +47,7 @@
 
 
 <div id="container1" class="container"></div>
+
 
 {% comment %} <div id="container3" class="container"></div> {% endcomment %}
 
@@ -48,30 +63,97 @@
 		</script>
   <button class="btn btn-danger" type="button"  onclick="closeCurrentTab()"> Close</button>
 </div>
-{% comment %} <table class = "table">
-<tr>
-<th>N0</th>
-<th>N1</th>
-<th>P(D/D)</th>
-<th>P(D/W)</th>
-<th>P(W/D)</th>
-<th>P(W/W)</th>
-<th>P(D)</th>
-<th>P(W)</th>
-</tr>
-{% for df in df %}
-<tr>
-<th>{{'df.N0'}}</th>
-<th>{{'df.N1'}}</th>
-<th>{{'df.P(D/D)'}}</th>
-<th>{{'df.P(D/W)'}}</th>
-<th>{{'df.P(W/D)'}}</th>
-<th>{{'df.P(W/W)'}}</th>
-<th>{{'df.P(D)'}}</th>
-<th>{{'df.P(W)'}}</th>
-</tr>
-{% endfor %}
-</table> {% endcomment %}
+<div style="font-size:18px">
+
+
+<table id="test_table" class="display" style="width:100%">
+        
+        
+    </table>
+
+<script type="text/javascript">
+   {% comment %} $(document).ready(function() {
+        
+       var json={{ test_data | safe }}
+       var data= json["context"]
+       var json2 = JSON.stringify(context)
+       window.alert(json2)
+       $('#test_table').DataTable({
+         "ajax": json2   
+       } );
+ 
+   }); {% endcomment %}
+   $('#test_table').DataTable({
+                          "ajaxSource": json2,
+                            "columns": [
+                              {
+                                "week": {{week}},
+                                 
+                              },
+                              {
+                                "PWW":{{pww}},
+                                 
+                              },
+                              {
+                                "PWD":{{PWD}},
+                                 
+                              }
+                            ]
+                        } );
+        
+ </script>
+
+
+{% comment %} <script>
+    function CreateTableFromJSON() {
+        var myBooks = [{
+            DD:{{DD}},
+            N0:{{N0}},
+            N1:{{N1}},
+        }]
+
+        // EXTRACT VALUE FOR HTML HEADER. 
+        // ('Book ID', 'Book Name', 'Category' and 'Price')
+        var col = [];
+        for (var i = 0; i < myBooks.length; i++) {
+            for (var key in myBooks[i]) {
+                if (col.indexOf(key) === -1) {
+                    col.push(key);
+                }
+            }
+        }
+
+        // CREATE DYNAMIC TABLE.
+        var table = document.createElement("table");
+
+        // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+
+        var tr = table.insertRow(-1);                   // TABLE ROW.
+
+        for (var i = 0; i < col.length; i++) {
+            var th = document.createElement("th");      // TABLE HEADER.
+            th.innerHTML = col[i];
+            tr.appendChild(th);
+        }
+
+        // ADD JSON DATA TO THE TABLE AS ROWS.
+        for (var i = 0; i < myBooks.length; i++) {
+
+            tr = table.insertRow(-1);
+
+            for (var j = 0; j < col.length; j++) {
+                var tabCell = tr.insertCell(-1);
+                tabCell.innerHTML = myBooks[i][col[j]];
+            }
+        }
+
+        // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+        var divContainer = document.getElementById("showData");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(table);
+    }
+</script> {% endcomment %}
+
 
 <script>
    /**
@@ -176,22 +258,22 @@ var chart1 = Highcharts.chart('container1', {
         }
     },
       xAxis: {
-        categories: {{ categories|safe }}
+        categories: {{ week|safe }}
       },
       
       series: [{
           name: 'P(W/W)',
-          data: {{ survived_series }},
+          data: {{ PWW }},
           color: 'green'
       }, {
           name: 'P(W/D)',
           dashStyle:'dash',
-          data: {{ not_survived_series }},
+          data: {{ PWD }},
           color: 'red'
       },{
           name: 'P(W)',
           dashStyle: 'shortdot',
-          data: {{ w }},
+          data: {{ PW }},
           color: 'blue',
           
       }],
@@ -248,5 +330,8 @@ $('#export-pdf').click(function() {
 });
 
 </script>
+<div>
+{% comment %} <a href="datatable" class="btn btn-link">Datatable</a> {% endcomment %}
+</div>
 {% endblock %}
 

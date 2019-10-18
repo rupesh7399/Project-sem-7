@@ -10,9 +10,9 @@
 {% comment %} -------------------------------------main content------------------------------------------------------ {% endcomment %}
 
 {% block content %}
-<div>
+<div onload='document.form1.text1.focus()'>
 
-<form method="POST" action="MarkovProcess">
+<form name="form1" method="POST" action="MarkovProcess">
         {% csrf_token %}
         <h4 class="text-danger">Select Time Duration of Data(Rain Fall):</h4>
         <div class="form-row">
