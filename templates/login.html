@@ -11,7 +11,8 @@
 
                     </div>
             {% endfor %}
-{% comment %} <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> {% endcomment %}
+{% comment %} 
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> {% endcomment %}
   <div class="col-sm-4 " style="margin-left : 33%;margin-bottom:100px;"  role="document" >
     <div class="modal-content">
       <div class="modal-header">
@@ -32,7 +33,12 @@
             <label for="message-text" class="col-form-label">Password:</label>
            <input type="password" class="form-control" id="exampleInputPassword1" name='password' placeholder="Password" required>
           </div>
-          <button type="submit" class="btn btn-primary">Login</button>
+          <div id="example1"></div>
+          <button type="submit" class="btn btn-primary">Login</button><br> 
+          <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+        async defer>
+    </script>
+          
            <div>
               {% for message in massages %}
               <h3> {{message1}} </h3>
@@ -43,13 +49,28 @@
 
       </div>
       <div class="modal-footer" style="">
-        
+        <a href="For_Pass"  class="btn btn-link text-success">-Forgot Password</a> 
       <a href="register"> <button type="button" class="btn btn-primary "   >Sign Up</button></a >
       </div>
     </div>
   </div>
 
-
+  <script type="text/javascript">
+    var verifyCallback = function(response) {
+      alert(response);
+    };
+    var widgetId1;
+    var widgetId2;
+    var onloadCallback = function() {
+      // Renders the HTML element with id 'example1' as a reCAPTCHA widget.
+      // The id of the reCAPTCHA widget is assigned to 'widgetId1'.
+      widgetId1 = grecaptcha.render('example1', {
+        'sitekey' : '6LcwbL4UAAAAAELiBvqBP5-1XfIdmLv_NyzBz7UE',
+        'theme' : 'light'
+      });
+      
+    };
+  </script>
 
 {% endblock  %}
 

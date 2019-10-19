@@ -64,97 +64,12 @@ th, td, p, input {
   <button class="btn btn-danger" type="button"  onclick="closeCurrentTab()"> Close</button>
 </div>
 <div style="font-size:18px">
+<form action ="data_table" method="post">
+{% csrf_token %}
 
-
-<table id="test_table" class="display" style="width:100%">
-        
-        
-    </table>
-
-<script type="text/javascript">
-   {% comment %} $(document).ready(function() {
-        
-       var json={{ test_data | safe }}
-       var data= json["context"]
-       var json2 = JSON.stringify(context)
-       window.alert(json2)
-       $('#test_table').DataTable({
-         "ajax": json2   
-       } );
- 
-   }); {% endcomment %}
-   $('#test_table').DataTable({
-                          "ajaxSource": json2,
-                            "columns": [
-                              {
-                                "week": {{week}},
-                                 
-                              },
-                              {
-                                "PWW":{{pww}},
-                                 
-                              },
-                              {
-                                "PWD":{{PWD}},
-                                 
-                              }
-                            ]
-                        } );
-        
- </script>
-
-
-{% comment %} <script>
-    function CreateTableFromJSON() {
-        var myBooks = [{
-            DD:{{DD}},
-            N0:{{N0}},
-            N1:{{N1}},
-        }]
-
-        // EXTRACT VALUE FOR HTML HEADER. 
-        // ('Book ID', 'Book Name', 'Category' and 'Price')
-        var col = [];
-        for (var i = 0; i < myBooks.length; i++) {
-            for (var key in myBooks[i]) {
-                if (col.indexOf(key) === -1) {
-                    col.push(key);
-                }
-            }
-        }
-
-        // CREATE DYNAMIC TABLE.
-        var table = document.createElement("table");
-
-        // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
-
-        var tr = table.insertRow(-1);                   // TABLE ROW.
-
-        for (var i = 0; i < col.length; i++) {
-            var th = document.createElement("th");      // TABLE HEADER.
-            th.innerHTML = col[i];
-            tr.appendChild(th);
-        }
-
-        // ADD JSON DATA TO THE TABLE AS ROWS.
-        for (var i = 0; i < myBooks.length; i++) {
-
-            tr = table.insertRow(-1);
-
-            for (var j = 0; j < col.length; j++) {
-                var tabCell = tr.insertCell(-1);
-                tabCell.innerHTML = myBooks[i][col[j]];
-            }
-        }
-
-        // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
-        var divContainer = document.getElementById("showData");
-        divContainer.innerHTML = "";
-        divContainer.appendChild(table);
-    }
-</script> {% endcomment %}
-
-
+<input type="submit" value="Data" class = "btn btn-link" formtarget="_blank">
+</form>
+  
 <script>
    /**
  * Create a global getSVG method that takes an array of charts as an argument. The SVG is returned as an argument in the callback.
@@ -267,14 +182,32 @@ var chart1 = Highcharts.chart('container1', {
           color: 'green'
       }, {
           name: 'P(W/D)',
-          dashStyle:'dash',
+          
           data: {{ PWD }},
-          color: 'red'
+          color: 'black'
+      },{
+          name: 'P(D/W)',
+          dashStyle: 'shortdot',
+          data: {{ PDW }},
+          color: '',
+          
       },{
           name: 'P(W)',
           dashStyle: 'shortdot',
           data: {{ PW }},
           color: 'blue',
+          
+      },{
+          name: 'P(D/D)',
+          dashStyle: 'shortdot',
+          data: {{ PDD }},
+          color: 'red',
+          
+      },{
+          name: 'P(D)',
+          dashStyle: 'shortdot',
+          data: {{ PD }},
+          color: 'orange',
           
       }],
 

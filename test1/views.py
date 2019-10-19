@@ -33,6 +33,7 @@ from chartit import DataPool, Chart
 import json
 #import win32api
 from jinja2 import Environment, FileSystemLoader
+from json2html import *
 #from weasyprint import HTML
 
 #############################################
@@ -308,6 +309,8 @@ from django.template.loader import render_to_string
 def MarkovProcess(request):
     date_min = request.POST.get('date_min')
     date_max = request.POST.get('date_max')
+    request.session['start'] = date_min
+    request.session['end'] = date_max
     
     qs = weather_data.pdobjects.filter(DATE__range=(date_min,date_max))
     df = read_frame(qs)
@@ -349,6 +352,8 @@ def MarkovProcess(request):
     #df = df.loc[:,['P(W)','P(W/W)','W/D']]
     df = df.fillna(0)
     df = df.round(2)
+    data = df.values.tolist()
+
     N0 = df.loc[:,['N0']].values.tolist()
     N1 = df.loc[:,['N1']].values.tolist()
     DD = df.loc[:,['PDD']].values.tolist()
@@ -372,9 +377,65 @@ def MarkovProcess(request):
         'N1' : json.dumps(N1),
         'DD' : json.dumps(DD),
         'DW' : json.dumps(DW),
+        'PDD': json.dumps(DD),
+        'PDW': json.dumps(DW),
+        'PD' : json.dumps(PD),
         
         
-    })
+    },)
 ###########################################################
 #-----------dataTable-------------------------------------#
 ###########################################################
+def data_table(request):
+    start = request.session['start']
+    end = request.session['end']
+    qs = weather_data.pdobjects.filter(DATE__range=(start,end))
+    df = read_frame(qs)
+    df = df.copy()
+    df = df.loc[:,['DATE','RF']]
+    df['Date'] = pd.to_datetime(df['DATE'], errors='coerce')
+    df.index = pd.to_datetime(df.index,unit='D')
+    df = df.asfreq('W').ffill()
+    df['P'] = df['RF'].apply(lambda x: 1 if x >= 1 else 0)
+    df = df.loc[:,['Date','P']]
+    df = df.asfreq('W').ffill()
+    df.reset_index(drop=True, inplace=True)
+    df = df.sort_values('Date')
+    df.reset_index(drop=True, inplace=True)
+    l = ['year','weekofyear']
+    df = df.join(pd.concat((getattr(df['Date'].dt, i).rename(i) for i in l), axis=1))
+    df = df.loc[:,['weekofyear','P']]
+    df['sec'] = df.P.shift(1)
+    def analysis(df):
+        if (df['P'] == 0 and df['sec']==0):
+            return 'DD'
+        elif (df['P'] == 0 and df['sec']==1):
+            return 'DW'
+        elif (df['P'] == 1 and df['sec']==0):
+            return 'WD'
+        elif (df['P'] == 1 and df['sec']==1):
+            return 'WW'
+    df['N'] = df.apply(analysis,axis = 1)
+    #df = pd.get_dummies(df.set_index('NO')['P']).max(level=0).reset_index()
+    df = df.groupby('weekofyear').N.value_counts().unstack().fillna(0)
+    df['N0'] = df['DD'] + df['WD']
+    df['N1'] = df['DW'] + df['WW']
+    df['PDD'] = df['DD'] / df['N0']
+    df['PDW'] = df['WD'] / df['N0']
+    df['PWD'] = df['DW'] / df['N1']
+    df['PWW'] = df['WW'] / df['N1']
+    df['PD'] = df['DD'] + df['WD'] / df['N0'] + df['N1']
+    df['PW'] = df['DW'] + df['WW'] / df['N0'] + df['N1']
+    #df = df.loc[:,['P(W)','P(W/W)','W/D']]
+    df = df.fillna(0)
+    df = df.round(2)
+    df = df.head(52)
+    
+    return HttpResponse(df.to_html())
+
+##########################################################
+########--Forgot password-----------------------------####
+##########################################################
+
+def For_Pass(request):
+    return render(request,"chepha.html")

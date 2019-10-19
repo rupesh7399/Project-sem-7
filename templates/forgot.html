@@ -1,0 +1,109 @@
+{% extends 'index.html' %}
+
+{% block content %}
+{% load static %}
+<script>
+  
+function check_email(element) {
+	$("#email_error_message").hide();
+	
+	email = $(element).val();
+	if (email == "") {
+		return;
+	}
+	$.ajax({
+		url : $(element).attr("data-url"),
+		data : {
+			"csrfmiddlewaretoken" : $(element).siblings("input[name='csrfmiddlewaretoken']" ).val(),
+			"email":email
+		},
+		method: "POST",
+		dataType : "json",
+		success : function (data) {
+			//console.log(data);
+			if (data.is_success) {
+                document.getElementById('submit').disabled=true;
+                 $("#email_error_message").html("This Email Id or User is not Registered");
+                $("#email_error_message").css('color','red');
+                $("#email_error_message").show();
+                $("submit").attr("disabled",false);
+                return false;
+			} else {
+                document.getElementById('submit').disabled=false;
+                 $("#email_error_message").html("True");
+                $("#email_error_message").css('color','green');
+				$("#email_error_message").show();
+                $("submit").attr("disabled",true);
+                return true;
+			}
+		}
+	});
+}
+// cepcha code
+
+
+</script>
+<div style="margin-top:100px;">
+    {% for message in messages %}
+    
+                        <div class="alert alert-success">
+                            <a class="close" href="#" data-dismiss="alert">×</a>
+    
+                            {{ message }}
+    
+                        </div>
+                {% endfor %}
+    {% comment %} 
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> {% endcomment %}
+      <div class="col-sm-4 " style="margin-left : 33%;margin-bottom:100px;"  role="document" >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+            
+            
+              
+          
+          </div>
+          <div class="modal-body">
+            <form action="For_Pass" method="post" onsubmit="return validateForm()>
+            {% csrf_token %}
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label">Email ID:</label>
+                <input type="email" required class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" placeholder="Email Id" onkeyup="check_email(this);return false;" data-url="{% url "check_email" %}" />
+                {% csrf_token %}
+                <span class="error_form text-denger" id="email_error_message"></span>
+              </div>
+              <div class="form-group">
+                
+              </div>
+              
+              
+               <div>
+                  {% for message in massages %}
+                  <h3> {{message1}} </h3>
+                  {% endfor %}
+            </div>
+            
+           
+    
+          </div>
+          <div class="modal-footer" style="">
+            
+            <button type="submit" name="submit" id = "submit" class="btn btn-primary" >Send</button>
+          </div>
+        </div>
+        </form>
+      </div>
+    
+     
+
+    
+
+<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+ {% comment %} <script src="exponential.js"></script>  {% endcomment %}
+
+ 
+{% endblock  %}
+
