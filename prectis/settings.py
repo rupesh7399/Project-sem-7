@@ -152,3 +152,4 @@ STATIC_ROOT = os.path.join(BASE_DIR,'assets')
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
+GOOGLE_RECAPTCHA_SECRET_KEY = '6LcwbL4UAAAAABVgX4AgntMukd4hBdPJR6zIAb3A'
