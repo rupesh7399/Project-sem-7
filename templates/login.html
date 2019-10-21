@@ -23,7 +23,7 @@
       
       </div>
       <div class="modal-body">
-        <form action="javascript:alert(grecaptcha.getResponse(widgetId1));" method="post">
+        <form action="login" method="post">
         {% csrf_token %}
           <div class="form-group">
             <label for="recipient-name" class="col-form-label">username:</label>
@@ -33,11 +33,11 @@
             <label for="message-text" class="col-form-label">Password:</label>
            <input type="password" class="form-control" id="exampleInputPassword1" name='password' placeholder="Password" required>
           </div>
-          <div class="g-recaptcha" data-sitekey="6LcwbL4UAAAAAELiBvqBP5-1XfIdmLv_NyzBz7UE" id ="example1"></div>
+          
+          <div class="g-recaptcha" data-sitekey="6LcwbL4UAAAAAELiBvqBP5-1XfIdmLv_NyzBz7UE"></div>
           <input type="submit" value="Login" class="btn btn-primary">
           <br> 
-          <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
-        async defer>
+          
     </script>
           
            <div>
@@ -55,23 +55,9 @@
       </div>
     </div>
   </div>
-  <script type="text/javascript">
-    var verifyCallback = function(response) {
-      alert();
-    };
-    var widgetId1;
-    
-    var onloadCallback = function() {
-      // Renders the HTML element with id 'example1' as a reCAPTCHA widget.
-      // The id of the reCAPTCHA widget is assigned to 'widgetId1'.
-      widgetId1 = grecaptcha.render('example1', {
-        'sitekey' : '6LcwbL4UAAAAAELiBvqBP5-1XfIdmLv_NyzBz7UE',
-        'theme' : 'light'
-      });
-      
-    };
-  </script>
-  
+  <script src='https://www.google.com/recaptcha/api.js'></script> 
+  <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+  async defer>
 
 {% endblock  %}
 

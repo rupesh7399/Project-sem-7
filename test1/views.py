@@ -50,30 +50,33 @@ def home(request):
 ####################################################
 # ----------------Loging---------------------------#
 ####################################################
-
+from six.moves import urllib
+from six.moves.urllib.request import urlopen
 def login(request):
    if request.method == 'POST':
        username = request.POST['email']
        password = request.POST['password']
-       user = auth.authenticate(username=username,password=password)
        recaptcha_response = request.POST.get('g-recaptcha-response')
        url = 'https://www.google.com/recaptcha/api/siteverify'
        values = {
-            'secret': settings.GOOGLE_RECAPTCHA_SECRET_KEY,
-                'response': recaptcha_response
+           'secret' : '6LcwbL4UAAAAABVgX4AgntMukd4hBdPJR6zIAb3A',
+           'response' : recaptcha_response
        }
        data = urllib.parse.urlencode(values).encode()
        req =  urllib.request.Request(url, data=data)
        response = urllib.request.urlopen(req)
        result = json.loads(response.read().decode())
-       if user is not None and result['success']:
-           auth.login(request,user)
-           
-           return redirect("/")
+       if result['success']:
+           user = auth.authenticate(username=username,password=password)
+           if user is not None:
+               auth.login(request,user)
+               return redirect("/")
+           else:
+               messages.info(request,'invelid credentials!!')
+               return render(request,'login.html')
        else:
-           messages.info(request,'invelid credentials!! & Invalid reCAPTCHA. Please try again.')
-           return render(request,'login.html')
-
+            messages.info(request,'Enter A chepcha!!')
+            return render(request,'login.html')
    else:
      return render(request,'login.html')
 
