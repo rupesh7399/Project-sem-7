@@ -32,7 +32,7 @@ from pylab import *
 from chartit import DataPool, Chart
 import json
 #import win32api
-from jinja2 import Environment, FileSystemLoader
+#from jinja2 import Environment, FileSystemLoader
 from json2html import *
 #from weasyprint import HTML
 
@@ -297,18 +297,20 @@ def desAnalysis(request):
     df = read_frame(qs)
     df = df.copy()
     df = df.loc[:,['RF']]
+    df.index = pd.to_datetime(df.index,unit='D')
+    df = df.asfreq('W').ffill()
     m = np.mean(df)
     mi = df.median()
     mo = stats.mode(df)
     min = df.min()
     max = df.max()
-    var = np.var(df)
-    std = np.std(df)
-    skew = scipy.stats.skew(df)
-    ku = scipy.stats.kurtosis(df)
-    a=np.percentile(df,100,axis=0, interpolation='lower')
-    from scipy.stats import iqr
-    b=iqr(df, axis=0 , rng=(25, 75), interpolation='lower')
+    #var = np.var(df)
+    #std = np.std(df)
+    #skew = scipy.stats.skew(df)
+    #ku = scipy.stats.kurtosis(df)
+    #a=np.percentile(df,100,axis=0, interpolation='lower')
+    #from scipy.stats import iqr
+    #b=iqr(df, axis=0 , rng=(25, 75), interpolation='lower')
 
     
     return render(request,"descriptiveanswer.html",locals())
