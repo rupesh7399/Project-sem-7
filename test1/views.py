@@ -297,21 +297,41 @@ def desAnalysis(request):
     df = read_frame(qs)
     df = df.copy()
     df = df.loc[:,['RF']]
-    m = np.mean(df)
-    mi = df.median()
-    mo = stats.mode(df)
-    min = df.min()
-    max = df.max()
-    var = np.var(df)
-    std = np.std(df)
-    skew = scipy.stats.skew(df)
-    ku = scipy.stats.kurtosis(df)
-    a=np.percentile(df,100,axis=0, interpolation='lower')
-    from scipy.stats import iqr
-    b=iqr(df, axis=0 , rng=(25, 75), interpolation='lower')
+    f = df.to_numpy()
+    mean = np.mean(f,1)
 
-    
-    return render(request,"descriptiveanswer.html",locals())
+    Mean = mean.values.tolist()
+    Max = df.max()
+    max_ = Max.values.tolist()
+    Min = df.min()
+    min_ = Min.values.tolist()
+    R = Max-Min
+    Range = R.values.tolist()
+    Sem = df.sem()
+    Std_Err = Sem.values.tolist()
+    std = df.std()
+    Std = std.values.tolist()
+    v = df.var()
+    v = v.values.tolist()
+    ske = df.skew()
+    ske = ske.values.tolist()
+    K = df.kurtosis()
+    k = K.values.tolist()
+    N = df.count()
+    n = N.values.tolist()
+    context = {
+        'Mean' : Mean,
+        'Max' : max_,
+        'Min' : min_,
+        'Range' : Range,
+        'Std_Err' : Std_Err,
+        'Std' : Std,
+        'v' : v,
+        'ske' : ske,
+        'k' : K,
+        'n' : n,
+    }
+    return render(request,"descriptiveanswer.html",context)
 
 
 ############################################################

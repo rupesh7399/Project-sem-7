@@ -16,62 +16,31 @@
 </br>
 <table class = "table" style="width:100px;" border='1'>
 <tr>
-<th colspan='2'> Descriptive Analysis of  Rainfall Data of {% for data in date_min %}{{data}}{% endfor %} To {% for data in date_max  %}{{data}}{% endfor %}   </th>
+    <th>Name</th>
+    <th>N</th>
+    <th>Range</th>
+    <th>Minimum</th>
+    <th>Maximum</th>
+    <th>Mean</th>
+    <th>Std.Deviation</th>
+    <th>Variance</th>
+    <th>Skewness</th>
+    <th>Kurtosis</th>
 </tr>
 <tr>
-
-<th>Mean</th>
-<td>{% for data in m  %}
-{{data}}
-{% endfor %}</td>
-</tr>
-<tr>
-<th>Median</th>
-<td>{% for data in mi  %}
-{{data}}
-{% endfor %}</td>
-</tr>
-<tr>
-<th>Mode</th>
-<td>{% for data in mo  %}
-{{data}}
-{% endfor %}</td>
-</tr>
-<tr>
-<th>Range</th>
-<td>Min = {% for data in min  %}
-{{data}}
-{% endfor %},Max={% for data in max  %}
-{{data}}
-{% endfor %}</td>
-</tr>
-<tr>
-<th>Perctntiles/Quartiles</th>
-<td>{% for data in a  %}
-{{data}}
-{% endfor %}</td>
-</tr>
-<tr>
-<th>IQR</th>
-<td>{% for data in b  %}
-{{data}}
-{% endfor %}</td>
-</tr>
-
-</tr>
-<tr>
-<th>Variance</th>
-<td>{% for data in var  %}{{data}}{% endfor %}</td>
-</tr>
- <th>StandardDeviation</th>
-<td>{% for data in std  %}{{data}}{% endfor %}</td>
-</tr>
-<th>Skewness</th>
-<td>{% for data in skew  %}{{data}}{% endfor %}</td>
-</tr>
-<th>Kurtosis</th>
-<td>{% for data in ku  %}{{data}}{% endfor %}</td>
+        <td>Rain Fall</td>
+        <td>{% for data in mean %}
+            {{data}}
+            {% endfor%}
+        </td>
+        <td>Range</td>
+        <td>Minimum</td>
+        <td>Maximum</td>
+        <td>Mean</td>
+        <td>Std.Deviation</td>
+        <td>Variance</td>
+        <td>Skewness</td>
+        <td>Kurtosis</td>
 </tr>
 </table>
-</div>
 {% endblock %}
