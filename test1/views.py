@@ -298,7 +298,7 @@ def desAnalysis(request):
     df = df.copy()
     df = df.loc[:,['RF']]
     f = df.to_numpy()
-    mean = np.mean(f,1)
+    mean = np.mean(f)
 
     Mean = mean.values.tolist()
     Max = df.max()
