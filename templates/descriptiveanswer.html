@@ -15,32 +15,44 @@
 <div>
 </br>
 <table class = "table" style="width:100px;" border='1'>
-<tr>
-    <th>Name</th>
-    <th>N</th>
-    <th>Range</th>
-    <th>Minimum</th>
-    <th>Maximum</th>
-    <th>Mean</th>
-    <th>Std.Deviation</th>
-    <th>Variance</th>
-    <th>Skewness</th>
-    <th>Kurtosis</th>
-</tr>
-<tr>
-        <td>Rain Fall</td>
-        <td>{% for data in mean %}
+    <tr>
+        <th>Name</th>
+        <th>N</th>
+        <th>Range</th>
+        <th>Minimum</th>
+        <th>Maximum</th>
+        <th>Mean</th>
+        <th>StdErr.ofmean</th>
+        <th>Std. Deviation </th>
+        <th>Variance  </th>
+        <th>Skewness        </th>
+        <th>Kurtosis	        </th>
+    </tr>
+    <tr>
+        <th>RF</th>
+        <td>{% for data in count  %}
             {{data}}
-            {% endfor%}
-        </td>
-        <td>Range</td>
-        <td>Minimum</td>
-        <td>Maximum</td>
-        <td>Mean</td>
-        <td>Std.Deviation</td>
-        <td>Variance</td>
-        <td>Skewness</td>
-        <td>Kurtosis</td>
-</tr>
+            {% endfor %}</td>
+        <td>{% for data in range  %}
+            {{data}}
+            {% endfor %}</td>
+            <td>{% for data in min  %}
+                {{data}}
+                {% endfor %}</td>
+                <td>{% for data in max  %}
+                    {{data}}
+                    {% endfor %}</td>
+                    <td>{% for data in m  %}
+                        {{data}}
+                        {% endfor %}</td>
+                        <td>{% for data in sem  %}
+                            {{data}}
+                            {% endfor %}</td>
+                        <td>{% for data in std  %}{{data}}{% endfor %}</td>
+                        <td>{% for data in var  %}{{data}}{% endfor %}</td>
+                        <td>{% for data in skew  %}{{data}}{% endfor %}</td>
+                        <td>{% for data in ku  %}{{data}}{% endfor %}</td>
+    </tr>
 </table>
+</div>
 {% endblock %}

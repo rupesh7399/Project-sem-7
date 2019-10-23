@@ -297,41 +297,34 @@ def desAnalysis(request):
     df = read_frame(qs)
     df = df.copy()
     df = df.loc[:,['RF']]
-    f = df.to_numpy()
-    mean = np.mean(f)
-
-    Mean = mean.values.tolist()
-    Max = df.max()
-    max_ = Max.values.tolist()
-    Min = df.min()
-    min_ = Min.values.tolist()
-    R = Max-Min
-    Range = R.values.tolist()
-    Sem = df.sem()
-    Std_Err = Sem.values.tolist()
+    m = df.mean()
+    m = m.round(2)
+    count = df.count()
+    mi = df.median()
+    mo = stats.mode(df)
+    min = df.min()
+    max = df.max()
+    range = df.max()-df.min()
     std = df.std()
-    Std = std.values.tolist()
-    v = df.var()
-    v = v.values.tolist()
-    ske = df.skew()
-    ske = ske.values.tolist()
-    K = df.kurtosis()
-    k = K.values.tolist()
-    N = df.count()
-    n = N.values.tolist()
-    context = {
-        'Mean' : Mean,
-        'Max' : max_,
-        'Min' : min_,
-        'Range' : Range,
-        'Std_Err' : Std_Err,
-        'Std' : Std,
-        'v' : v,
-        'ske' : ske,
-        'k' : K,
-        'n' : n,
-    }
-    return render(request,"descriptiveanswer.html",context)
+    std = std.round(2)
+    var = df.var()
+    var = var.round(2)
+    skew = df.skew()
+    skew = skew.round(2)
+    ku = df.kurtosis()
+    ku = ku.round(2)
+    sem = df.sem()
+    sem = sem.round(2)
+    
+    #std = np.std(df)
+    #skew = scipy.stats.skew(df)
+    #ku = scipy.stats.kurtosis(df)
+    #a=np.percentile(df,100,axis=0, interpolation='lower')
+    #from scipy.stats import iqr
+    #b=iqr(df, axis=0 , rng=(25, 75), interpolation='lower')
+
+    
+    return render(request,"descriptiveanswer.html",locals())
 
 
 ############################################################
