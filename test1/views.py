@@ -87,16 +87,30 @@ def login(request):
 def register(request):
 
     if request.method == 'POST':
-
+        
         username = request.POST['username']
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
         email = request.POST['email']
         password = request.POST['password']
-        user = User.objects.create_user(username=username,first_name=first_name,last_name=last_name,email=email,password=password)
-        user.save()
-        messages.info(request,'Successful Registation!!')
-        return redirect('register')
+        recaptcha_response = request.POST.get('g-recaptcha-response')
+        url = 'https://www.google.com/recaptcha/api/siteverify'
+        values = {
+           'secret' : '6LcwbL4UAAAAABVgX4AgntMukd4hBdPJR6zIAb3A',
+           'response' : recaptcha_response
+        }
+        data = urllib.parse.urlencode(values).encode()
+        req =  urllib.request.Request(url, data=data)
+        response = urllib.request.urlopen(req)
+        result = json.loads(response.read().decode())
+        if result['success']:
+            user = User.objects.create_user(username=username,first_name=first_name,last_name=last_name,email=email,password=password)
+            user.save()
+            messages.info(request,'Successful Registation!!')
+            return redirect('register')
+        else:
+            messages.info(request,'Select The Valid Chepcha !!')
+            return redirect('register')
     else:
         return render(request,'register.html')
 

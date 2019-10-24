@@ -128,10 +128,10 @@ function check_email(element) {
                 <input type="password" name="confirmation" id="confirmation" class="form-control input-sm" placeholder="Password" >
                 <span class="error_form text-denger" id="retype_password_error_message"></span>
             </div>
-
+            <div class="g-recaptcha" data-sitekey="6LcwbL4UAAAAAELiBvqBP5-1XfIdmLv_NyzBz7UE"></div><br>
             <div class="form-group ">
-              
-                <button type="submit" name="submit" id = "submit" class="btn btn-primary" >Register</button>
+                
+                <br><button type="submit" name="submit" id = "submit" class="btn btn-primary" >Register</button>
               {% for message in messages %}
               <h3 class = "text-success">
                     {{message}}
@@ -142,11 +142,14 @@ function check_email(element) {
  
     </form>
 </div>
-
+<script src='https://www.google.com/recaptcha/api.js'></script> 
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit"
+  async defer ></script>
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
 <script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
  {% comment %} <script src="exponential.js"></script>  {% endcomment %}
+ 
 
 <!--=============================
 velidation script
