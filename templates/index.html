@@ -54,7 +54,7 @@
       <nav class="main-nav float-right d-none d-lg-block">
           
         <ul>
-          <li class="active"><a href="home">Home</a></li>
+          <li class="active"><a href="{% url 'home' %}">Home</a></li>
           <li><a href="about">About Us</a></li> 
           
           {% comment %} <li><a href="#portfolio">Portfolio</a></li> {% endcomment %}
@@ -63,9 +63,9 @@
              {% if user.is_superuser %}
             <li><a href="markov">Analysis</a></li>    
             <li><a href="data">Data Manager</a></li>
-            <li><a href="#">Hello,{{user.first_name}}</a></li>
+            <li><a href="admin">Hello,{{user.first_name}}</a></li>
             
-            <li><a href="logout">Logout</a></li>     
+            <li><a href="{% url 'logout' %}">Logout</a></li>     
             {% else %}
               <li><a href="markov">Analysis</a></li>
               <li><a href="changepass">Change Password</a></li>

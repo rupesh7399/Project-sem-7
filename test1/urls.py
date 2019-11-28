@@ -5,8 +5,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
+
 urlpatterns = [
     path('',views.home,name="home"),
+    
     path('profile',views.profile,name ='profile'),
     path('login',views.login,name="login"),
     path('register',views.register,name="register"),
@@ -31,7 +33,10 @@ urlpatterns = [
     path('data_table',views.data_table,name="data_table"),
     path('For_Pass',views.For_Pass,name="For_Pass"),
     path('send',views.send,name="send"),
-    
+    path('accounts/',include('django.contrib.auth.urls')),
+    path('accounts/password_reset/login',views.login,name='login'),
+    path('accounts/password_reset/register',views.register,name='register'),
+    path('accounts/password_reset/about',views.about,name='about'),
         
     
     

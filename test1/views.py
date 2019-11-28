@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.forms import UserCreationForm
 from django.db.models.query import EmptyQuerySet
 import numpy as np
 import pandas_datareader as pr
