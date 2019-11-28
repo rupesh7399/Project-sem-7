@@ -4,6 +4,7 @@ from .import views
 from django.conf import settings
 from django.conf.urls.static import static
 
+
 urlpatterns = [
     path('',views.home,name="home"),
     path('profile',views.profile,name ='profile'),
@@ -29,6 +30,7 @@ urlpatterns = [
     path('MarkovProcess',views.MarkovProcess,name="MarkovProcess"),
     path('data_table',views.data_table,name="data_table"),
     path('For_Pass',views.For_Pass,name="For_Pass"),
+    path('send',views.send,name="send"),
     
         
     

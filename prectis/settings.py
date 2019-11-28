@@ -101,6 +101,9 @@ DATABASES = {
         
 #     }
 # }
+# For email
+
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -153,3 +156,13 @@ STATIC_ROOT = os.path.join(BASE_DIR,'assets')
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
 GOOGLE_RECAPTCHA_SECRET_KEY = '6LcwbL4UAAAAABVgX4AgntMukd4hBdPJR6zIAb3A'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

@@ -34,6 +34,8 @@ import json
 #import win32api
 from jinja2 import Environment, FileSystemLoader
 from json2html import *
+from django.conf import settings
+from django.core.mail import send_mail
 #from weasyprint import HTML
 
 #############################################
@@ -475,6 +477,21 @@ def data_table(request):
 ##########################################################
 ########--Forgot password-----------------------------####
 ##########################################################
-
+from django.shortcuts import render_to_response
 def For_Pass(request):
-    return render(request,"chepha.html")
+    return render(request,"forgot.html  ")
+
+def send(request):
+    if request.method == 'POST':
+        email = request.POST.get('email','')
+        subject = 'Recover Your Password for send One Time OTP'
+        mess = 'ONE TIME OTP'
+        email_form = settings.EMAIL_HOST_USER
+        recipient_list= [email]       
+        send_mail( subject, mess, email_form,recipient_list)
+        messages.info(request,'Your Reset Password link sent successfully!')
+        return render(request,'forgot.html')
+    else:
+        
+        return(request,'forgot.html',messages)
+    
