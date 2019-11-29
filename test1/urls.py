@@ -31,12 +31,19 @@ urlpatterns = [
     path('chake',views.chake,name="chake"),
     path('MarkovProcess',views.MarkovProcess,name="MarkovProcess"),
     path('data_table',views.data_table,name="data_table"),
-    path('For_Pass',views.For_Pass,name="For_Pass"),
-    path('send',views.send,name="send"),
+    
+    
     path('accounts/',include('django.contrib.auth.urls')),
     path('accounts/password_reset/login',views.login,name='login'),
     path('accounts/password_reset/register',views.register,name='register'),
     path('accounts/password_reset/about',views.about,name='about'),
+    path('admin/data',views.data,name='data'),
+    path('admin/',views.data,name='admin'),
+    path('admin/admin',views.data,name='admin'),
+    path('admin/home',views.home,name='admin'),
+    path('admin/reports',views.reports,name='report'),
+
+    
         
     
     

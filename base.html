@@ -1,0 +1,13 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+  {{form.as_p}}
+      
+      <div class="g-recaptcha" data-sitekey="6LcwbL4UAAAAAELiBvqBP5-1XfIdmLv_NyzBz7UE"></div>
+      <input type="submit" value="Login" class="btn btn-primary">
+</form>
+    
+{% endblock  %}
+

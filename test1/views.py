@@ -1,3 +1,5 @@
+from django.template.loader import get_template
+
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import UserCreationForm
 from django.db.models.query import EmptyQuerySet
@@ -7,7 +9,7 @@ import pandas as pd
 import datetime
 import xlrd
 import sqlite3
-from django.shortcuts import render,redirect
+from django.shortcuts import *
 from django.http import HttpResponse , JsonResponse
 from django.contrib.auth.models import User, auth 
 from django.contrib import messages
@@ -38,7 +40,8 @@ from json2html import *
 from django.conf import settings
 from django.core.mail import send_mail
 #from weasyprint import HTML
-
+from django.template import RequestContext
+from .utils import *
 #############################################
 #----------ABOUT----------------------------#
 #############################################
@@ -71,7 +74,8 @@ def login(request):
        result = json.loads(response.read().decode())
        if result['success']:
            user = auth.authenticate(username=username,password=password)
-           if user is not None:
+           if user is not None :
+               
                auth.login(request,user)
                return redirect("/")
            else:
@@ -120,7 +124,7 @@ def register(request):
 ###########################################
 # ------------- Profile-------------------#
 ###########################################
-
+@login_required
 def profile(request):
     if request.user.is_superuser :
         redirect('admin')
@@ -198,7 +202,7 @@ def check_email(request):
 ###################################
 #-------------DATA---------------#
 ###################################
-
+@login_required
 def data(request):
     data = weather_data.objects.all()
     
@@ -209,13 +213,14 @@ def data(request):
 ###################################
 # ----- Reports ------------------#
 ###################################
-
+@login_required
 def reports(request):
     return render(request,"reports.html")
 
 ##################################
 #-----Weather Data Delete--------#
 ##################################
+@login_required
 def W_delete(request,id):
     weather_data.objects.get(id=id).delete()
     return redirect("data.html")
@@ -225,6 +230,64 @@ def W_delete(request,id):
 ##################################
 import pdfkit
 
+# def filter(request,*args, **kwargs):
+#     date_min = request.POST.get('date_min')
+#     date_max = request.POST.get('date_max')
+#     filter_type = request.POST.get('data')
+
+
+#     qs = weather_data.pdobjects.filter(DATE__range=(date_min,date_max))
+
+#     if filter_type == "Month":
+#         df = read_frame(qs)
+#         df['Date'] = pd.to_datetime(df['DATE'], errors='coerce')
+#         df['Month_Number'] = df['Date'].dt.month
+#         df['Year'] = df['Date'].dt.year
+#         df = df.groupby(['Year','Month_Number']).agg({'ET':'max','EP':'max','BSS':'max','RF':'max','WS':'max','DT1':'max','WT1':'max','DT2':'max','WT2':'max','MAXT':'max','MINT':'max','RH11':'max','RH22':'max','VP11':'max','VP11':'max','CLOUDM':'max','CLOUDE':'max','SOIL1':'max','SOIL2':'max','SOIL3':'max','SOIL4':'max','SOIL5':'max','SOIL6':'max','MinTtest':'max','MaxTtest1':'max','MaxTtest2':'max'})
+#         context = {
+#                     'df' : df,                  
+                    
+#                 } 
+#         template = get_template('invioce.html')      
+#         html = template.render(context)
+#         pdf = render_to_pdf('invioce.html', context)
+#         if pdf:
+#             response = HttpResponse(pdf, content_type='application/pdf')
+#             filename = "Invoice_%s.pdf" %("12341231")
+#             content = "inline; filename='%s'" %(filename)
+#             download = request.GET.get("download")
+#             if download:
+#                 content = "attachment; filename='%s'" %(filename)
+#             response['Content-Disposition'] = content
+#             return response
+#         return HttpResponse("Not found")
+        
+#     elif filter_type == "weekly":
+#         df = read_frame(qs)
+#         df['Date'] = pd.to_datetime(df['DATE'], errors='coerce')
+#         df['Week_Number'] = df['Date'].dt.week
+#         df['Year'] = df['Date'].dt.year
+#         df = df.groupby(['Year','Week_Number']).agg({'ET':'sum','EP':'sum','BSS':'sum','RF':'sum','WS':'sum','DT1':'sum','WT1':'sum','DT2':'sum','WT2':'sum','MAXT':'sum','MINT':'sum','RH11':'sum','RH22':'sum','VP11':'sum','VP11':'sum','CLOUDM':'sum','CLOUDE':'sum','SOIL1':'sum','SOIL2':'sum','SOIL3':'sum','SOIL4':'sum','SOIL5':'sum','SOIL6':'sum','MinTtest':'sum','MaxTtest1':'sum','MaxTtest2':'sum'})
+#         return HttpResponse(df.to_html())
+#     else :
+#         context = {
+#                     'df' : qs,                  
+                    
+#                 } 
+#         template = get_template('invioce.html')      
+#         html = template.render(context)
+#         pdf = render_to_pdf('invioce.html', context)
+#         if pdf:
+#             response = HttpResponse(pdf, content_type='application/pdf')
+#             filename = "Invoice_%s.pdf" %("12341231")
+#             content = "inline; filename='%s'" %(filename)
+#             download = request.GET.get("download")
+#             if download:
+#                 content = "attachment; filename='%s'" %(filename)
+#             response['Content-Disposition'] = content
+#             return response
+#         return HttpResponse("Not found")
+@login_required
 def filter(request):
     date_min = request.POST.get('date_min')
     date_max = request.POST.get('date_max')
@@ -238,17 +301,20 @@ def filter(request):
         df['Date'] = pd.to_datetime(df['DATE'], errors='coerce')
         df['Month_Number'] = df['Date'].dt.month
         df['Year'] = df['Date'].dt.year
-        df = df.groupby(['Year','Month_Number']).agg({'ET':'max','EP':'max','BSS':'max','RF':'max','WS':'max','DT1':'max','WT1':'max','DT2':'max','WT2':'max','MAXT':'max','MINT':'max','RH11':'max','RH22':'max','VP11':'max','VP11':'max','CLOUDM':'max','CLOUDE':'max','SOIL1':'max','SOIL2':'max','SOIL3':'max','SOIL4':'max','SOIL5':'max','SOIL6':'max','MinTtest':'max','MaxTtest1':'max','MaxTtest2':'max'})
+        df = df.groupby(['Year','Month_Number']).agg({'ET':'max','EP':'max','BSS':'max','RF':'max','WS':'max','DT1':'max','WT1':'max','DT2':'max','WT2':'max','MAXT':'max','MINT':'max','RH11':'max','RH22':'max','VP11':'max','VP11':'max','SOIL1':'max','SOIL2':'max','SOIL3':'max','SOIL4':'max','SOIL5':'max','SOIL6':'max','MinTtest':'max','MaxTtest1':'max','MaxTtest2':'max'})
         return HttpResponse(df.to_html())
     elif filter_type == "weekly":
         df = read_frame(qs)
         df['Date'] = pd.to_datetime(df['DATE'], errors='coerce')
         df['Week_Number'] = df['Date'].dt.week
         df['Year'] = df['Date'].dt.year
-        df = df.groupby(['Year','Week_Number']).agg({'ET':'sum','EP':'sum','BSS':'sum','RF':'sum','WS':'sum','DT1':'sum','WT1':'sum','DT2':'sum','WT2':'sum','MAXT':'sum','MINT':'sum','RH11':'sum','RH22':'sum','VP11':'sum','VP11':'sum','CLOUDM':'sum','CLOUDE':'sum','SOIL1':'sum','SOIL2':'sum','SOIL3':'sum','SOIL4':'sum','SOIL5':'sum','SOIL6':'sum','MinTtest':'sum','MaxTtest1':'sum','MaxTtest2':'sum'})
+        df = df.groupby(['Year','Week_Number']).agg({'ET':'sum','EP':'sum','BSS':'sum','RF':'sum','WS':'sum','DT1':'sum','WT1':'sum','DT2':'sum','WT2':'sum','MAXT':'sum','MINT':'sum','RH11':'sum','RH22':'sum','VP11':'sum','VP11':'sum','SOIL1':'sum','SOIL2':'sum','SOIL3':'sum','SOIL4':'sum','SOIL5':'sum','SOIL6':'sum','MinTtest':'sum','MaxTtest1':'sum','MaxTtest2':'sum'})
         return HttpResponse(df.to_html())
     else:
         return render(request,"reports.html",locals())
+          
+       
+
     
 
 # hint: https://stackoverflow.com/questions/4668619/how-do-i-filter-query-objects-by-date-range-in-django  
@@ -266,7 +332,7 @@ def filter(request):
 ################################
 # ------- Page of markov chain-#
 ################################
-
+@login_required
 def markov(request):
     return render(request,"markov.html")
 
@@ -298,14 +364,14 @@ def chake(request):
 ######################################
 #---Discriptive Analysis--############
 ######################################
-
+@login_required
 def descriptive(request):
     return render(request,"descriptive.html")
 
 ########################################
 #-----Dscriptive Analysis Process code-#
 ########################################
-
+@login_required
 def desAnalysis(request):
     date_min = request.POST.get('date_min')
     date_max = request.POST.get('date_max')
@@ -348,6 +414,7 @@ def desAnalysis(request):
 ###########--Start Markov Chain process--###################
 ############################################################
 from django.template.loader import render_to_string
+@login_required
 def MarkovProcess(request):
     date_min = request.POST.get('date_min')
     date_max = request.POST.get('date_max')
@@ -425,9 +492,13 @@ def MarkovProcess(request):
         
         
     },)
+
+from io import StringIO
+import xlsxwriter
 ###########################################################
 #-----------dataTable-------------------------------------#
 ###########################################################
+@login_required
 def data_table(request):
     start = request.session['start']
     end = request.session['end']
@@ -462,37 +533,27 @@ def data_table(request):
     df = df.groupby('weekofyear').N.value_counts().unstack().fillna(0)
     df['N0'] = df['DD'] + df['WD']
     df['N1'] = df['DW'] + df['WW']
-    df['PDD'] = df['DD'] / df['N0']
-    df['PDW'] = df['WD'] / df['N0']
-    df['PWD'] = df['DW'] / df['N1']
-    df['PWW'] = df['WW'] / df['N1']
-    df['PD'] = df['DD'] + df['WD'] / df['N0'] + df['N1']
-    df['PW'] = df['DW'] + df['WW'] / df['N0'] + df['N1']
+    df['P(D/D)'] = df['DD'] / df['N0']
+    df['P(D/W)'] = df['WD'] / df['N0']
+    df['P(W/D)'] = df['DW'] / df['N1']
+    df['P(W/W)'] = df['WW'] / df['N1']
+    df['P(D)'] = df['DD'] + df['WD'] / df['N0'] + df['N1']
+    df['P(W)'] = df['DW'] + df['WW'] / df['N0'] + df['N1']
     #df = df.loc[:,['P(W)','P(W/W)','W/D']]
     df = df.fillna(0)
     df = df.round(2)
-    df = df.head(52)
-    
+    table = df.head(52)
     return HttpResponse(df.to_html())
+ 
+   
+    
+    
+
 
 ##########################################################
 ########--Forgot password-----------------------------####
 ##########################################################
-from django.shortcuts import render_to_response
-def For_Pass(request):
-    return render(request,"forgot.html  ")
 
-def send(request):
-    if request.method == 'POST':
-        email = request.POST.get('email','')
-        subject = 'Recover Your Password for send One Time OTP'
-        mess = 'ONE TIME OTP'
-        email_form = settings.EMAIL_HOST_USER
-        recipient_list= [email]       
-        send_mail( subject, mess, email_form,recipient_list)
-        messages.info(request,'Your Reset Password link sent successfully!')
-        return render(request,'forgot.html')
-    else:
-        
-        return(request,'forgot.html',messages)
+from django.shortcuts import render_to_response
+
     
